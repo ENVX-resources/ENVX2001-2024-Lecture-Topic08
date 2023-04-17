@@ -757,10 +757,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <ul>
 <li>The partial F-test is significant (p-value &lt; 0.05), so we can reject the null hypothesis and conclude that the full model is significantly better (as expected)</li>
 </ul>
-<h3 id="but-wait">But wait…</h3>
 </div>
-</section><section id="partial-regression-coefficients" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">Partial regression coefficients</h2>
-<h3 id="but-wait-1">But wait…</h3>
+</section><section id="but-wait" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">But wait…</h2>
 <div class="fragment">
 <p>Looking back at the original model, we can see that the partial regression coefficients are the <em>same</em> as the partial F-test results!</p>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-10_3d93619bdf6ee01fd951731bb70fa49c">
@@ -787,7 +785,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 4 Residuals   107 27.7   0.259      NA   NA       </code></pre>
 </div>
 </div>
-<p>This is because the reduced model is <em>nested</em> within the full model.</p>
+<p>This is because the reduced model is <em>nested</em> within the full model so the partial F-test is equivalent to a partial regression coefficient test.</p>
 </div>
 </section><section id="nested-models" class="slide level2"><h2>Nested models</h2>
 <ul>
@@ -821,7 +819,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </div>
-</section><section id="another-example-bird-abundance" class="slide level2"><h2>Another example: Bird abundance</h2>
+</section></section><section><section id="another-example-bird-abundance" class="title-slide slide level1 center"><h1>Another example: Bird abundance</h1>
+
+</section><section id="about" class="slide level2"><h2>About</h2>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-11_b3262d521c28613297f78279da4a9845">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>loyn <span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"assets/loyn.csv"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -836,7 +836,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <li>YR.ISOL: Years since isolation (years)</li>
 </ul>
 </li>
-</ul></section><section id="bird-abundance-full-model" class="slide level2"><h2>Bird abundance: full model</h2>
+</ul></section><section id="full-model-1" class="slide level2"><h2>Full model</h2>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-12_5a9bc26b7ff0441485cd0a4e2ab54067">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">glimpse</span>(loyn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1088,11 +1088,11 @@ F-statistic: 17.75 on 6 and 49 DF,  p-value: 8.443e-11</code></pre>
 </ul></section><section id="the-problem" class="slide level2"><h2>The problem</h2>
 <ul>
 <li>Other combinations of predictors exist but are not shown.</li>
-<li>Need automated way to select the best model – 6 predictors gives us 6! = 720 models to choose from!</li>
+<li>Need <em>automated way</em> to select the best model – 6 predictors gives us 6! = <strong>720 models</strong> to choose from!</li>
 <li>Two options:
 <ul>
 <li>Backward elimination</li>
-<li>Forward selection</li>
+<li>Forward selection (not covered in this course)</li>
 </ul>
 </li>
 </ul>

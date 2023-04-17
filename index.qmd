@@ -305,11 +305,8 @@ pf_result
 
 - The partial F-test is significant (p-value < 0.05), so we can reject the null hypothesis and conclude that the full model is significantly better (as expected)
 
-### But wait...
 
-## Partial regression coefficients {auto-animate="true"}
-
-### But wait...
+## But wait... {auto-animate="true"}
 
 . . .
 
@@ -320,7 +317,7 @@ pf_result
 full
 ```
 
-This is because the reduced model is *nested* within the full model.
+This is because the reduced model is *nested* within the full model so the partial F-test is equivalent to a partial regression coefficient test.
 
 ## Nested models
 
@@ -342,7 +339,9 @@ This is because the reduced model is *nested* within the full model.
 **Partial F-tests will *only* make sense/work for nested models!**
 ::: 
 
-## Another example: Bird abundance
+# Another example: Bird abundance
+
+## About
 
 ```{r}
 loyn <-read_csv("assets/loyn.csv") 
@@ -356,7 +355,7 @@ loyn <-read_csv("assets/loyn.csv")
   - GRAZE: Grazing pressure 1(light) – 5 (heavy) – ALT: Altitude (m)
   - YR.ISOL: Years since isolation (years)
 
-## Bird abundance: full model
+## Full model
 
 ```{r}
 glimpse(loyn)
@@ -500,10 +499,10 @@ knitr::kable(rs)
 ## The problem
 
 - Other combinations of predictors exist but are not shown.
-- Need automated way to select the best model -- 6 predictors gives us 6! = 720 models to choose from!
+- Need *automated way* to select the best model -- 6 predictors gives us 6! = **720 models** to choose from!
 - Two options:
   - Backward elimination
-  - Forward selection
+  - Forward selection (not covered in this course)
 
 :::{.callout-note}
 We focus on backward elimination here, but forward selection is also a viable option that is **not** covered in this course.
