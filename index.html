@@ -1109,19 +1109,90 @@ F-statistic: 17.75 on 6 and 49 DF,  p-value: 8.443e-11</code></pre>
 </div>
 </div>
 </div>
-</section><section id="backward-elimination" class="slide level2"><h2>Backward elimination</h2>
+</section></section><section><section id="backward-elimination" class="title-slide slide level1 center"><h1>Backward elimination</h1>
+
+</section><section id="steps-for-backward-elimination" class="slide level2"><h2>Steps for backward elimination</h2>
 <ol type="1">
 <li>Start with full model.</li>
 <li>For each predictor, test the effect of its removal on the model fit.</li>
 <li>Remove the predictor that has the <em>least</em> effect on the model fit i.e.&nbsp;the <strong>least informative</strong> predictor, unless it is nonetheless supplying significant information about the response.</li>
 <li>Repeat steps 2 and 3 until no predictors can be removed without significantly affecting the model fit.</li>
-</ol></section><section id="tbc" class="slide level2"><h2>TBC</h2>
-<p>More to come</p>
+</ol>
+<p>In backward selection, the model fit is assessed using the Akaike Information Criterion (AIC) or the Bayesian Information Criterion (BIC). <strong>Here we focus on the AIC.</strong></p>
+</section><section id="in-r" class="slide level2"><h2>In R</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-21_5c664d6aebf598eb477814fb2213d1b3">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>back_step <span class="ot">&lt;-</span> <span class="fu">step</span>(loyn_logfit, <span class="at">direction =</span> <span class="st">"backward"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=214.14
+ABUND ~ (AREA + YR.ISOL + DIST + LDIST + GRAZE + ALT + AREA_L10 + 
+    LDIST_L10 + DIST_L10) - AREA - LDIST - DIST
+
+            Df Sum of Sq    RSS    AIC
+- LDIST_L10  1      3.80 2000.7 212.25
+- DIST_L10   1      4.68 2001.5 212.27
+- ALT        1     27.02 2023.9 212.90
+&lt;none&gt;                   1996.8 214.14
+- YR.ISOL    1    108.83 2105.7 215.11
+- GRAZE      1    131.07 2127.9 215.70
+- AREA_L10   1   1059.75 3056.6 235.98
+
+Step:  AIC=212.25
+ABUND ~ YR.ISOL + GRAZE + ALT + AREA_L10 + DIST_L10
+
+           Df Sum of Sq    RSS    AIC
+- DIST_L10  1     12.64 2013.3 210.60
+- ALT       1     35.12 2035.8 211.22
+&lt;none&gt;                  2000.7 212.25
+- YR.ISOL   1    121.64 2122.3 213.55
+- GRAZE     1    132.44 2133.1 213.84
+- AREA_L10  1   1193.04 3193.7 236.44
+
+Step:  AIC=210.6
+ABUND ~ YR.ISOL + GRAZE + ALT + AREA_L10
+
+           Df Sum of Sq    RSS    AIC
+- ALT       1     57.84 2071.1 210.19
+&lt;none&gt;                  2013.3 210.60
+- GRAZE     1    123.48 2136.8 211.94
+- YR.ISOL   1    134.89 2148.2 212.23
+- AREA_L10  1   1227.11 3240.4 235.25
+
+Step:  AIC=210.19
+ABUND ~ YR.ISOL + GRAZE + AREA_L10
+
+           Df Sum of Sq    RSS    AIC
+&lt;none&gt;                  2071.1 210.19
+- YR.ISOL   1    129.81 2200.9 211.59
+- GRAZE     1    188.45 2259.6 213.06
+- AREA_L10  1   1262.97 3334.1 234.85</code></pre>
+</div>
+</div>
+<p>Before we interpret… let’s look at the new column, <strong>AIC</strong>.</p>
+</section></section><section><section id="akaike-information-criterion-aic" class="title-slide slide level1 center"><h1>Akaike Information Criterion (AIC)</h1>
+
+</section><section id="history-of-aic" class="slide level2"><h2>History of AIC</h2>
+<p><span class="math display">\[AIC = 2k - 2\ln(L)\]</span></p>
+<ul>
+<li>Most <strong>popular</strong> model selection criterion.</li>
+<li>Developed by <a href="https://en.wikipedia.org/wiki/Hirotugu_Akaike">Hirotsugu Akaike</a> under the name of “an information criterion” (AIC)</li>
+</ul></section><section id="formula" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">Formula</h2>
+<p><span class="math display">\[AIC = 2k - 2\ln(L)\]</span></p>
+<p>where <span class="math inline">\(k\)</span> is the number of parameters in the model and <span class="math inline">\(L\)</span> is the maximum value of the likelihood function. When used in linear regression, the AIC can also be defined as:</p>
+<p><span class="math display">\[AIC = n\log(\frac{RSS}{n}) + 2k\]</span></p>
+<p>where <span class="math inline">\(RSS\)</span> is the residual sum of squares and <span class="math inline">\(2k\)</span> is the number of parameters in the model (i.e.&nbsp;model complexity).</p>
+</section><section id="interpretation" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">Interpretation</h2>
+<p><span class="math display">\[AIC = n\log(\frac{RSS}{n}) + 2k\]</span></p>
+<ul>
+<li>The AIC is a measure of the <strong>relative quality</strong> or <strong>goodness of fit</strong> of a statistical model for a given set of data.</li>
+<li>It estimates the <strong>relative amount of information</strong> lost by a given model when it is used to approximate the true underlying process that generated the data.</li>
+<li>The smaller the AIC, the better the model fits the data.</li>
+<li>A <em>relative</em> measure and <em>unitless</em>, so it is not worth trying to interpret alone.</li>
+</ul>
 <!-- 
 ## Abalone
 
 
-::: {.cell hash='index_cache/revealjs/unnamed-chunk-21_a4c4bbfe45777022cd2284c1d9acb124'}
+::: {.cell hash='index_cache/revealjs/unnamed-chunk-22_aad154de3463ae7522a03fb11a9bf340'}
 
 ```{.r .cell-code}
 # load abalone data
@@ -1148,8 +1219,7 @@ $ Rings         <int> 15, 7, 9, 10, 7, 8, 20, 16, 9, 19, 14, 10, 11, 10, 10, 1�
 :::
 
 
-Can we predict the age of abalone from physical measurements? -->
-</section></section><section id="thanks" class="title-slide slide level1 center"><h1>Thanks!</h1>
+Can we predict the age of abalone from physical measurements? --></section></section><section id="thanks" class="title-slide slide level1 center"><h1>Thanks!</h1>
 <p><strong>Questions? Comments?</strong></p>
 <p>Slides made with <a href="https://quarto.org">Quarto</a></p>
 <div class="footer footer-default">

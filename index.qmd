@@ -508,16 +508,53 @@ knitr::kable(rs)
 We focus on backward elimination here, but forward selection is also a viable option that is **not** covered in this course.
 :::
 
-## Backward elimination
+# Backward elimination
+
+## Steps for backward elimination
 
 1. Start with full model.
 2. For each predictor, test the effect of its removal on the model fit.
 3. Remove the predictor that has the *least* effect on the model fit i.e. the **least informative** predictor, unless it is nonetheless supplying significant information about the response.
 4. Repeat steps 2 and 3 until no predictors can be removed without significantly affecting the model fit.
 
-## TBC
+In backward selection, the model fit is assessed using the Akaike Information Criterion (AIC) or the Bayesian Information Criterion (BIC). **Here we focus on the AIC.**
 
-More to come
+## In R
+
+```{r}
+back_step <- step(loyn_logfit, direction = "backward")
+```
+
+Before we interpret... let's look at the new column, **AIC**.
+
+# Akaike Information Criterion (AIC)
+
+## History of AIC
+
+$$AIC = 2k - 2\ln(L)$$
+
+- Most **popular** model selection criterion.
+- Developed by [Hirotsugu Akaike](https://en.wikipedia.org/wiki/Hirotugu_Akaike) under the name of "an information criterion" (AIC)
+
+## Formula {auto-animate="true"}
+
+$$AIC = 2k - 2\ln(L)$$
+
+where $k$ is the number of parameters in the model and $L$ is the maximum value of the likelihood function. When used in linear regression, the AIC can also be defined as:
+
+$$AIC = n\log(\frac{RSS}{n}) + 2k$$
+
+where $RSS$ is the residual sum of squares and $2k$ is the number of parameters in the model (i.e. model complexity).
+
+## Interpretation {auto-animate="true"}
+
+$$AIC = n\log(\frac{RSS}{n}) + 2k$$
+
+- The AIC is a measure of the **relative quality** or **goodness of fit** of a statistical model for a given set of data.
+- It estimates the **relative amount of information** lost by a given model when it is used to approximate the true underlying process that generated the data.
+- The smaller the AIC, the better the model fits the data.
+- A *relative* measure and *unitless*, so it is not worth trying to interpret alone.
+
 
 <!-- 
 ## Abalone
