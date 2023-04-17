@@ -493,9 +493,16 @@ knitr::kable(rs)
 We focus on backward elimination here, but forward selection is also a viable option that is **not** covered in this course.
 :::
 
-## TBD
+## Backward elimination
 
-More to come...
+1. Start with full model.
+2. For each predictor, test the effect of its removal on the model fit.
+3. Remove the predictor that has the *least* effect on the model fit i.e. the **least informative** predictor, unless it is nonetheless supplying significant information about the response.
+4. Repeat steps 2 and 3 until no predictors can be removed without significantly affecting the model fit.
+
+## TBC
+
+More to come
 
 <!-- 
 ## Abalone
