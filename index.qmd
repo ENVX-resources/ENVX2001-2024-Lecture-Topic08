@@ -436,6 +436,22 @@ loyn_logfit <- lm(ABUND ~ . - AREA - LDIST - DIST, data = loyn)
 summary(loyn_logfit)
 ```
 
+## Checking assumptions
+
+Before:
+
+```{r}
+performance::check_model(loyn_fit)
+```
+
+## Checking assumptions
+
+After:
+
+```{r}
+performance::check_model(loyn_logfit)
+```
+
 
 ## The best model?
 

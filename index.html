@@ -988,40 +988,52 @@ Multiple R-squared:  0.6849,    Adjusted R-squared:  0.6464
 F-statistic: 17.75 on 6 and 49 DF,  p-value: 8.443e-11</code></pre>
 </div>
 </div>
-</section><section id="the-best-model" class="slide level2"><h2>The best model?</h2>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-18_b5b059e96f3b54e23d9ff07724db49cd">
-<details><summary>Code</summary><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb35-2"><a href="#cb35-2"></a>full6 <span class="ot">&lt;-</span> loyn_logfit</span>
-<span id="cb35-3"><a href="#cb35-3"></a>part5 <span class="ot">&lt;-</span> <span class="fu">update</span>(full6, . <span class="sc">~</span> . <span class="sc">-</span> LDIST_L10)</span>
-<span id="cb35-4"><a href="#cb35-4"></a>part4 <span class="ot">&lt;-</span> <span class="fu">update</span>(part5, . <span class="sc">~</span> . <span class="sc">-</span> DIST_L10)</span>
-<span id="cb35-5"><a href="#cb35-5"></a>part3 <span class="ot">&lt;-</span> <span class="fu">update</span>(part4, . <span class="sc">~</span> . <span class="sc">-</span> ALT)</span>
-<span id="cb35-6"><a href="#cb35-6"></a>part2 <span class="ot">&lt;-</span> <span class="fu">update</span>(part3, . <span class="sc">~</span> . <span class="sc">-</span> YR.ISOL)</span>
-<span id="cb35-7"><a href="#cb35-7"></a>part1 <span class="ot">&lt;-</span> <span class="fu">update</span>(part2, . <span class="sc">~</span> . <span class="sc">-</span> GRAZE)</span>
-<span id="cb35-8"><a href="#cb35-8"></a></span>
-<span id="cb35-9"><a href="#cb35-9"></a>formulas <span class="ot">&lt;-</span> <span class="fu">c</span>(part1<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb35-10"><a href="#cb35-10"></a>              part2<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb35-11"><a href="#cb35-11"></a>              part3<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb35-12"><a href="#cb35-12"></a>              part4<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb35-13"><a href="#cb35-13"></a>              part5<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb35-14"><a href="#cb35-14"></a>              loyn_logfit<span class="sc">$</span>call<span class="sc">$</span>formula)</span>
-<span id="cb35-15"><a href="#cb35-15"></a>formulas <span class="ot">&lt;-</span></span>
-<span id="cb35-16"><a href="#cb35-16"></a>  <span class="fu">c</span>(<span class="st">"ABUND ~ AREA_L10"</span>,</span>
-<span id="cb35-17"><a href="#cb35-17"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE"</span>,</span>
-<span id="cb35-18"><a href="#cb35-18"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL"</span>,</span>
-<span id="cb35-19"><a href="#cb35-19"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT"</span>,</span>
-<span id="cb35-20"><a href="#cb35-20"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10"</span>,</span>
-<span id="cb35-21"><a href="#cb35-21"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10 + LDIST_L10"</span>)</span>
-<span id="cb35-22"><a href="#cb35-22"></a></span>
-<span id="cb35-23"><a href="#cb35-23"></a>rs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">glance</span>(part1), </span>
-<span id="cb35-24"><a href="#cb35-24"></a>          <span class="fu">glance</span>(part2), </span>
-<span id="cb35-25"><a href="#cb35-25"></a>          <span class="fu">glance</span>(part3), </span>
-<span id="cb35-26"><a href="#cb35-26"></a>          <span class="fu">glance</span>(part4),</span>
-<span id="cb35-27"><a href="#cb35-27"></a>          <span class="fu">glance</span>(part5), </span>
-<span id="cb35-28"><a href="#cb35-28"></a>          <span class="fu">glance</span>(full6)) <span class="sc">%&gt;%</span></span>
-<span id="cb35-29"><a href="#cb35-29"></a>        <span class="fu">mutate</span>(<span class="at">Model =</span> formulas) <span class="sc">%&gt;%</span></span>
-<span id="cb35-30"><a href="#cb35-30"></a>        <span class="fu">select</span>(Model, r.squared, adj.r.squared)</span>
-<span id="cb35-31"><a href="#cb35-31"></a></span>
-<span id="cb35-32"><a href="#cb35-32"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section><section id="checking-assumptions" class="slide level2"><h2>Checking assumptions</h2>
+<p>Before:</p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-18_e0667c11d2028788b7334b0278074f33">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(loyn_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section><section id="checking-assumptions-1" class="slide level2"><h2>Checking assumptions</h2>
+<p>After:</p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-19_8e3722b0fdcd54d7232d8a31132e52ea">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(loyn_logfit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section><section id="the-best-model" class="slide level2"><h2>The best model?</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-20_42d585bc219653d993f9bef22cae836b">
+<details><summary>Code</summary><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb37-2"><a href="#cb37-2"></a>full6 <span class="ot">&lt;-</span> loyn_logfit</span>
+<span id="cb37-3"><a href="#cb37-3"></a>part5 <span class="ot">&lt;-</span> <span class="fu">update</span>(full6, . <span class="sc">~</span> . <span class="sc">-</span> LDIST_L10)</span>
+<span id="cb37-4"><a href="#cb37-4"></a>part4 <span class="ot">&lt;-</span> <span class="fu">update</span>(part5, . <span class="sc">~</span> . <span class="sc">-</span> DIST_L10)</span>
+<span id="cb37-5"><a href="#cb37-5"></a>part3 <span class="ot">&lt;-</span> <span class="fu">update</span>(part4, . <span class="sc">~</span> . <span class="sc">-</span> ALT)</span>
+<span id="cb37-6"><a href="#cb37-6"></a>part2 <span class="ot">&lt;-</span> <span class="fu">update</span>(part3, . <span class="sc">~</span> . <span class="sc">-</span> YR.ISOL)</span>
+<span id="cb37-7"><a href="#cb37-7"></a>part1 <span class="ot">&lt;-</span> <span class="fu">update</span>(part2, . <span class="sc">~</span> . <span class="sc">-</span> GRAZE)</span>
+<span id="cb37-8"><a href="#cb37-8"></a></span>
+<span id="cb37-9"><a href="#cb37-9"></a>formulas <span class="ot">&lt;-</span> <span class="fu">c</span>(part1<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb37-10"><a href="#cb37-10"></a>              part2<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb37-11"><a href="#cb37-11"></a>              part3<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb37-12"><a href="#cb37-12"></a>              part4<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb37-13"><a href="#cb37-13"></a>              part5<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb37-14"><a href="#cb37-14"></a>              loyn_logfit<span class="sc">$</span>call<span class="sc">$</span>formula)</span>
+<span id="cb37-15"><a href="#cb37-15"></a>formulas <span class="ot">&lt;-</span></span>
+<span id="cb37-16"><a href="#cb37-16"></a>  <span class="fu">c</span>(<span class="st">"ABUND ~ AREA_L10"</span>,</span>
+<span id="cb37-17"><a href="#cb37-17"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE"</span>,</span>
+<span id="cb37-18"><a href="#cb37-18"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL"</span>,</span>
+<span id="cb37-19"><a href="#cb37-19"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT"</span>,</span>
+<span id="cb37-20"><a href="#cb37-20"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10"</span>,</span>
+<span id="cb37-21"><a href="#cb37-21"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10 + LDIST_L10"</span>)</span>
+<span id="cb37-22"><a href="#cb37-22"></a></span>
+<span id="cb37-23"><a href="#cb37-23"></a>rs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">glance</span>(part1), </span>
+<span id="cb37-24"><a href="#cb37-24"></a>          <span class="fu">glance</span>(part2), </span>
+<span id="cb37-25"><a href="#cb37-25"></a>          <span class="fu">glance</span>(part3), </span>
+<span id="cb37-26"><a href="#cb37-26"></a>          <span class="fu">glance</span>(part4),</span>
+<span id="cb37-27"><a href="#cb37-27"></a>          <span class="fu">glance</span>(part5), </span>
+<span id="cb37-28"><a href="#cb37-28"></a>          <span class="fu">glance</span>(full6)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-29"><a href="#cb37-29"></a>        <span class="fu">mutate</span>(<span class="at">Model =</span> formulas) <span class="sc">%&gt;%</span></span>
+<span id="cb37-30"><a href="#cb37-30"></a>        <span class="fu">select</span>(Model, r.squared, adj.r.squared)</span>
+<span id="cb37-31"><a href="#cb37-31"></a></span>
+<span id="cb37-32"><a href="#cb37-32"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <table>
 <colgroup>
@@ -1108,7 +1120,7 @@ F-statistic: 17.75 on 6 and 49 DF,  p-value: 8.443e-11</code></pre>
 ## Abalone
 
 
-::: {.cell hash='index_cache/revealjs/unnamed-chunk-19_032fb56a006bcc88ed38637bf60874fc'}
+::: {.cell hash='index_cache/revealjs/unnamed-chunk-21_a4c4bbfe45777022cd2284c1d9acb124'}
 
 ```{.r .cell-code}
 # load abalone data
