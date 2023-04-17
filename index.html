@@ -569,9 +569,10 @@ F-statistic: 70.62 on 3 and 107 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>
 <strong>Cross-validation</strong>: leave-one-out, k-fold, etc., works well when the number of predictors is large and main aim is to <strong>predict</strong> the model. <em>Note: can be used with stepwise regression.</em>
 </li>
-</ul></section><section id="air-quality-can-we-reduce-the-number-of-predictors" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">Air quality: can we reduce the number of predictors?</h2>
-<h3 id="exercise-partial-f-test">Exercise: partial F-test</h3>
-<h4 id="full-model">Full model:</h4>
+</ul></section></section><section><section id="partia-f-test" class="title-slide slide level1 center"><h1>Partia F-test</h1>
+
+</section><section id="air-quality-can-we-reduce-the-number-of-predictors" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">Air quality: can we reduce the number of predictors?</h2>
+<h3 id="full-model">Full model:</h3>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-5_9d162b1681cb066151d58bbabf0f4860">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb5-1" class="hljs-ln-code"><a href="#cb5-1"></a><span class="fu">summary</span>(multi_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -611,8 +612,8 @@ F-statistic: 70.62 on 3 and 107 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li>Full model: multiple R-squared = 0.66, adjusted R-squared = 0.66</li>
 </ul>
 <div class="fragment">
-<h4 id="reduced-model-take-out-wind">Reduced model: take out <code>Wind</code>
-</h4>
+<h3 id="reduced-model-take-out-wind">Reduced model: take out <code>Wind</code>
+</h3>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-6_cee009e5a3f65a6818f7807b3f2380f8">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a>reduced_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(Ozone) <span class="sc">~</span> Temp <span class="sc">+</span> Solar.R, <span class="at">data =</span> airquality)</span>
 <span id="cb7-2" class="hljs-ln-code"><a href="#cb7-2"></a><span class="fu">summary</span>(reduced_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -642,7 +643,7 @@ F-statistic: 86.73 on 2 and 108 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="fragment">
 <ul>
 <li>Reduced model: multiple R-squared = 0.62, adjusted R-squared = 0.61</li>
-<li><strong>Adjusted R-squared is lower, but is a 0.04 difference significant?</strong></li>
+<li><strong>Adjusted R-squared is lower, but is a 0.04 difference “worth it”?</strong></li>
 </ul>
 <p>(As the full model has a higher adjusted R-squared, we can already conclude that the full model is better than the reduced model, but let’s answer the question anyway.)</p>
 </div>

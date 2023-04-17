@@ -195,11 +195,11 @@ p
 - **Stepwise regression**: add/remove predictors one at a time, works well when the number of predictors is large and the main aim is to **interpret** the model.
 - **Cross-validation**: leave-one-out, k-fold, etc., works well when the number of predictors is large and main aim is to **predict** the model. *Note: can be used with stepwise regression.*
 
+# Partia F-test
+
 ## Air quality: can we reduce the number of predictors? {auto-animate="true"}
 
-### Exercise: partial F-test
-
-#### Full model:
+### Full model:
 ```{r}
 summary(multi_fit)
 ```
@@ -215,7 +215,7 @@ summary(multi_fit)
 
 . . .
 
-#### Reduced model: take out `Wind`
+### Reduced model: take out `Wind`
 ```{r}
 reduced_fit <- lm(log(Ozone) ~ Temp + Solar.R, data = airquality)
 summary(reduced_fit)
@@ -224,7 +224,7 @@ summary(reduced_fit)
 . . .
 
 - Reduced model: multiple R-squared = 0.62, adjusted R-squared = 0.61
-- **Adjusted R-squared is lower, but is a 0.04 difference significant?**
+- **Adjusted R-squared is lower, but is a 0.04 difference "worth it"?**
 
 (As the full model has a higher adjusted R-squared, we can already conclude that the full model is better than the reduced model, but let's answer the question anyway.)
 
