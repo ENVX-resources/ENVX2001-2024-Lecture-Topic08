@@ -46,7 +46,7 @@ ggplot2::theme_set(cowplot::theme_half_open())
 - Model *development*.
 - Model transformations: e.g. Log-linear, Linear-log, Log-log.
 - Model diagnostics: Residuals.
-- Model intterpretation: Coefficients.
+- Model interpretation: Coefficients.
 
 . . .
 
