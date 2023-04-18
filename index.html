@@ -556,11 +556,12 @@ F-statistic: 70.62 on 3 and 107 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <img data-src="index_files/figure-revealjs/unnamed-chunk-3-1.png" width="960" class="r-stretch"></section><section class="slide level2">
 <img data-src="index_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"><ul>
-<li>As complexity increases, bias <em>decreases</em> (the mean of a model’s predictions is closer to the true mean).</li>
-<li>As complexity increases, variance (the variance about the mean of a model’s predictions) may <em>first</em> decrease, and then it <em>increases</em> as the predictions become more <em>wild</em>
-</li>
+<li>As complexity increases, bias <em>decreases</em> (the mean of a model’s predictions is closer to the true mean). However, it may (sometimes) increase again if the model is too complex.</li>
+<li>As complexity increases, variance (the variance about the mean of a model’s predictions) <em>may first</em> decrease, but it <em>increases</em> as the predictions become more <em>wild</em>.</li>
 <li>The <strong>goal</strong> is to find a model that isn’t too complex, and also has a “balance” between <strong>bias and variance</strong>.</li>
-</ul></section><section id="how-do-we-determine-the-best-model" class="slide level2"><h2>How do we determine the best model?</h2>
+</ul></section><section id="bias-variance-plot" class="slide level2"><h2>Bias-variance plot</h2>
+
+<img data-src="assets/bias_var.svg" class="r-stretch"></section><section id="how-do-we-determine-the-best-model" class="slide level2"><h2>How do we determine the best model?</h2>
 <ul>
 <li>
 <strong>Partial F-test</strong>: compare the full model to a reduced model, works well when the number of predictors is small and models are <em>nested</em> (more on this later).</li>

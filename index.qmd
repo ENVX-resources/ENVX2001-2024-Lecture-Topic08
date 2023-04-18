@@ -184,10 +184,13 @@ p
 p
 ```
 
-- As complexity increases, bias *decreases* (the mean of a model’s predictions is closer to the true mean).
-- As complexity increases, variance (the variance about the mean of a model’s predictions) may *first* decrease, and then it *increases* as the predictions become more *wild*
+- As complexity increases, bias *decreases* (the mean of a model’s predictions is closer to the true mean). However, it may (sometimes) increase again if the model is too complex.
+- As complexity increases, variance (the variance about the mean of a model’s predictions) *may first* decrease, but it *increases* as the predictions become more *wild*.
 - The **goal** is to find a model that isn't too complex, and also has a "balance" between **bias and variance**.
 
+## Bias-variance plot
+
+![](assets/bias_var.svg)
 
 ## How do we determine the best model?
 
