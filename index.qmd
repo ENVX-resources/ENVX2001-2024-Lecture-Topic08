@@ -451,6 +451,74 @@ After:
 performance::check_model(loyn_logfit)
 ```
 
+# Other (important) checks
+Once we enter the realm of multivariate statistics, there are a number of other checks that we should perform to ensure that our model is appropriate for our data.
+
+## Leverage
+
+- The leverage plot shows the influence of each observation (i.e. point) on the model.
+- Points with high leverage can have a large effect on the model when removed.
+- Identified by the Cook's distance statistic -- named after the American statistician R. Dennis Cook, who introduced the concept in 1977.
+
+:::{.callout-tip}
+The leverage plot is a useful tool for identifying outliers and influential points, but can also be used to check for other issues such as heteroskedasticity (equal variances) and non-linearity!
+:::
+
+## Reading the leverage plot
+
+```{r}
+par(mfrow = c(1,2))
+plot(loyn_logfit, which = c(4,5))
+```
+
+-Visually, points with Cook's distance > 0.5 are considered influential by default, but this is a somewhat arbitrary threshold.
+- In practice, you should use a threshold that is appropriate for your data and model.
+
+## Outlier detection using `performance`
+
+```{r}
+performance::check_model(loyn_logfit, check = c("outliers", "pp_check"))
+```
+
+```{r}
+performance::check_outliers(loyn_logfit)
+```
+
+## Variance inflation factors
+
+- VIFs are a measure of the amount of collinearity in the model.
+- Sometimes easier to interpret than pairwise correlation coefficients.
+
+```{r}
+cor(loyn)
+```
+
+```{r}
+car::vif(loyn_logfit)
+```
+
+- $1$ = no correlation with other predictors
+- $>10$ is a sign for high, not tolerable correlation of model predictors which need to be removed and the model refitted
+
+
+## Variance inflation factors using `performance`
+
+```{r}
+vif <- performance::check_collinearity(loyn_logfit)
+vif
+```
+
+:::{.callout-note}
+Tolerance is the reciprocal of VIF
+:::
+
+## Visualising VIF
+
+
+```{r}
+plot(performance::check_collinearity(loyn_logfit))
+```
+
 
 ## The best model?
 
@@ -535,6 +603,7 @@ $$AIC = 2k - 2\ln(L)$$
 
 - Most **popular** model selection criterion.
 - Developed by [Hirotsugu Akaike](https://en.wikipedia.org/wiki/Hirotugu_Akaike) under the name of "an information criterion" (AIC)
+- Founded on information theory which is concerned with the transmission, processing, utilization, and extraction of information.
 
 ## Formula {auto-animate="true"}
 
@@ -552,8 +621,62 @@ $$AIC = n\log(\frac{RSS}{n}) + 2k$$
 
 - The AIC is a measure of the **relative quality** or **goodness of fit** of a statistical model for a given set of data.
 - It estimates the **relative amount of information** lost by a given model when it is used to approximate the true underlying process that generated the data.
-- The smaller the AIC, the better the model fits the data.
+- **The smaller the AIC, the better the model fits the data.**
 - A *relative* measure and *unitless*, so it is not worth trying to interpret alone.
+
+## Back to our example
+
+```{r}
+back_step <- step(loyn_logfit, direction = "backward")
+```
+Printing `back_step` reveals the final model:
+
+```{r}
+back_step
+```
+
+## Backward elimination: coefficients
+
+### Full model
+
+```{r}
+#| code-fold: true
+sjPlot::tab_model(
+  loyn_logfit, back_step, 
+  show.ci = FALSE, 
+  show.aic = TRUE,
+  dv.labels = c("Full model",
+                "Backward model")
+)
+```
+
+The backward model retains more explanatory power than the full model!
+
+# Summary
+
+## Model selection
+
+### Model development
+1. Start with full model and check assumptions (e.g. normality, homoscedasticity, linearity, etc.).
+2. Look for additional issues (e.g. multicollinearity, outliers, etc.) - look at correlations, leverage, VIF plots.
+3. Consider transformations (e.g. log, sqrt, etc.).
+4. Test assumptions again.
+
+### Model selection
+
+5. Use VIF as an initial step to get rid of highly correlated predictors.
+6. Perform variable selection using backward elimination (good and fast), because:
+   - Using r~2~ as a criterion is *not* recommended (it is not a good measure of model fit, only a good measure of variance explained). 
+   - Using adjuster r~2~ is better, but has the same issue as r~2~.
+   - Using partial F-test is good, but slow.
+
+# Next lecture
+
+## Next lecture: model interpretation and prediction
+
+- How to incorporate cross-validation into your workflow
+- Determining prediction intervals and performance metrics
+
 
 
 <!-- 
@@ -567,6 +690,7 @@ glimpse(abalone)
 ```
 
 Can we predict the age of abalone from physical measurements? -->
+
 
 
 # Thanks!

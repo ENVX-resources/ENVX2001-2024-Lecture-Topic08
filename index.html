@@ -1001,40 +1001,163 @@ F-statistic: 17.75 on 6 and 49 DF,  p-value: 8.443e-11</code></pre>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(loyn_logfit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section><section id="the-best-model" class="slide level2"><h2>The best model?</h2>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-20_42d585bc219653d993f9bef22cae836b">
-<details><summary>Code</summary><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb37-2"><a href="#cb37-2"></a>full6 <span class="ot">&lt;-</span> loyn_logfit</span>
-<span id="cb37-3"><a href="#cb37-3"></a>part5 <span class="ot">&lt;-</span> <span class="fu">update</span>(full6, . <span class="sc">~</span> . <span class="sc">-</span> LDIST_L10)</span>
-<span id="cb37-4"><a href="#cb37-4"></a>part4 <span class="ot">&lt;-</span> <span class="fu">update</span>(part5, . <span class="sc">~</span> . <span class="sc">-</span> DIST_L10)</span>
-<span id="cb37-5"><a href="#cb37-5"></a>part3 <span class="ot">&lt;-</span> <span class="fu">update</span>(part4, . <span class="sc">~</span> . <span class="sc">-</span> ALT)</span>
-<span id="cb37-6"><a href="#cb37-6"></a>part2 <span class="ot">&lt;-</span> <span class="fu">update</span>(part3, . <span class="sc">~</span> . <span class="sc">-</span> YR.ISOL)</span>
-<span id="cb37-7"><a href="#cb37-7"></a>part1 <span class="ot">&lt;-</span> <span class="fu">update</span>(part2, . <span class="sc">~</span> . <span class="sc">-</span> GRAZE)</span>
-<span id="cb37-8"><a href="#cb37-8"></a></span>
-<span id="cb37-9"><a href="#cb37-9"></a>formulas <span class="ot">&lt;-</span> <span class="fu">c</span>(part1<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb37-10"><a href="#cb37-10"></a>              part2<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb37-11"><a href="#cb37-11"></a>              part3<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb37-12"><a href="#cb37-12"></a>              part4<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb37-13"><a href="#cb37-13"></a>              part5<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
-<span id="cb37-14"><a href="#cb37-14"></a>              loyn_logfit<span class="sc">$</span>call<span class="sc">$</span>formula)</span>
-<span id="cb37-15"><a href="#cb37-15"></a>formulas <span class="ot">&lt;-</span></span>
-<span id="cb37-16"><a href="#cb37-16"></a>  <span class="fu">c</span>(<span class="st">"ABUND ~ AREA_L10"</span>,</span>
-<span id="cb37-17"><a href="#cb37-17"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE"</span>,</span>
-<span id="cb37-18"><a href="#cb37-18"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL"</span>,</span>
-<span id="cb37-19"><a href="#cb37-19"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT"</span>,</span>
-<span id="cb37-20"><a href="#cb37-20"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10"</span>,</span>
-<span id="cb37-21"><a href="#cb37-21"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10 + LDIST_L10"</span>)</span>
-<span id="cb37-22"><a href="#cb37-22"></a></span>
-<span id="cb37-23"><a href="#cb37-23"></a>rs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">glance</span>(part1), </span>
-<span id="cb37-24"><a href="#cb37-24"></a>          <span class="fu">glance</span>(part2), </span>
-<span id="cb37-25"><a href="#cb37-25"></a>          <span class="fu">glance</span>(part3), </span>
-<span id="cb37-26"><a href="#cb37-26"></a>          <span class="fu">glance</span>(part4),</span>
-<span id="cb37-27"><a href="#cb37-27"></a>          <span class="fu">glance</span>(part5), </span>
-<span id="cb37-28"><a href="#cb37-28"></a>          <span class="fu">glance</span>(full6)) <span class="sc">%&gt;%</span></span>
-<span id="cb37-29"><a href="#cb37-29"></a>        <span class="fu">mutate</span>(<span class="at">Model =</span> formulas) <span class="sc">%&gt;%</span></span>
-<span id="cb37-30"><a href="#cb37-30"></a>        <span class="fu">select</span>(Model, r.squared, adj.r.squared)</span>
-<span id="cb37-31"><a href="#cb37-31"></a></span>
-<span id="cb37-32"><a href="#cb37-32"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section></section><section><section id="other-important-checks" class="title-slide slide level1 center"><h1>Other (important) checks</h1>
+<p>Once we enter the realm of multivariate statistics, there are a number of other checks that we should perform to ensure that our model is appropriate for our data.</p>
+</section><section id="leverage" class="slide level2"><h2>Leverage</h2>
+<ul>
+<li>The leverage plot shows the influence of each observation (i.e.&nbsp;point) on the model.</li>
+<li>Points with high leverage can have a large effect on the model when removed.</li>
+<li>Identified by the Cook’s distance statistic – named after the American statistician R. Dennis Cook, who introduced the concept in 1977.</li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>The leverage plot is a useful tool for identifying outliers and influential points, but can also be used to check for other issues such as heteroskedasticity (equal variances) and non-linearity!</p>
+</div>
+</div>
+</div>
+</section><section id="reading-the-leverage-plot" class="slide level2"><h2>Reading the leverage plot</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-20_9a953268ceedd96aa051637844a8ee8e">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="fu">plot</span>(loyn_logfit, <span class="at">which =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"><p>-Visually, points with Cook’s distance &gt; 0.5 are considered influential by default, but this is a somewhat arbitrary threshold. - In practice, you should use a threshold that is appropriate for your data and model.</p>
+</section><section id="outlier-detection-using-performance" class="slide level2"><h2>Outlier detection using <code>performance</code>
+</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-21_6ab6bf57e5d03f71d35b846e7ac2d15c">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>performance<span class="sc">::</span><span class="fu">check_model</span>(loyn_logfit, <span class="at">check =</span> <span class="fu">c</span>(<span class="st">"outliers"</span>, <span class="st">"pp_check"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"><div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-22_e692b2ba963966b21313f68ade29212e">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>performance<span class="sc">::</span><span class="fu">check_outliers</span>(loyn_logfit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OK: No outliers detected.
+- Based on the following method and threshold: cook (0.92).
+- For variable: (Whole model)</code></pre>
+</div>
+</div>
+</section><section id="variance-inflation-factors" class="slide level2"><h2>Variance inflation factors</h2>
+<ul>
+<li>VIFs are a measure of the amount of collinearity in the model.</li>
+<li>Sometimes easier to interpret than pairwise correlation coefficients.</li>
+</ul>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-23_79633fc1395af360a58b746a3f22987a">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="fu">cor</span>(loyn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                ABUND         AREA      YR.ISOL       DIST       LDIST
+ABUND      1.00000000  0.255970206  0.503357741  0.2361125  0.08715258
+AREA       0.25597021  1.000000000 -0.001494192  0.1083429  0.03458035
+YR.ISOL    0.50335774 -0.001494192  1.000000000  0.1132175 -0.08331686
+DIST       0.23611248  0.108342870  0.113217524  1.0000000  0.31717234
+LDIST      0.08715258  0.034580346 -0.083316857  0.3171723  1.00000000
+GRAZE     -0.68251138 -0.310402417 -0.635567104 -0.2558418 -0.02800944
+ALT        0.38583617  0.387753885  0.232715406 -0.1101125 -0.30602220
+AREA_L10   0.74003580  0.584651024  0.278414517  0.3047850  0.33680642
+LDIST_L10  0.11812448  0.101607829 -0.161116108  0.4968169  0.82059568
+DIST_L10   0.12672333  0.163054319 -0.019572228  0.8233190  0.29365797
+                GRAZE        ALT   AREA_L10   LDIST_L10    DIST_L10
+ABUND     -0.68251138  0.3858362  0.7400358  0.11812448  0.12672333
+AREA      -0.31040242  0.3877539  0.5846510  0.10160783  0.16305432
+YR.ISOL   -0.63556710  0.2327154  0.2784145 -0.16111611 -0.01957223
+DIST      -0.25584182 -0.1101125  0.3047850  0.49681692  0.82331904
+LDIST     -0.02800944 -0.3060222  0.3368064  0.82059568  0.29365797
+GRAZE      1.00000000 -0.4071671 -0.5590886 -0.03399082 -0.14263922
+ALT       -0.40716705  1.0000000  0.2751428 -0.27404380 -0.21900701
+AREA_L10  -0.55908864  0.2751428  1.0000000  0.38247952  0.30216662
+LDIST_L10 -0.03399082 -0.2740438  0.3824795  1.00000000  0.60386637
+DIST_L10  -0.14263922 -0.2190070  0.3021666  0.60386637  1.00000000</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-24_4f8e43a59dcda337f11829fb096f7722">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>car<span class="sc">::</span><span class="fu">vif</span>(loyn_logfit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  YR.ISOL     GRAZE       ALT  AREA_L10 LDIST_L10  DIST_L10 
+ 1.804769  2.524814  1.467937  1.911514  2.009749  1.654553 </code></pre>
+</div>
+</div>
+<ul>
+<li>
+<span class="math inline">\(1\)</span> = no correlation with other predictors</li>
+<li>
+<span class="math inline">\(&gt;10\)</span> is a sign for high, not tolerable correlation of model predictors which need to be removed and the model refitted</li>
+</ul></section><section id="variance-inflation-factors-using-performance" class="slide level2"><h2>Variance inflation factors using <code>performance</code>
+</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-25_04774c40388dd18a9350791feef3d9cc">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>vif <span class="ot">&lt;-</span> performance<span class="sc">::</span><span class="fu">check_collinearity</span>(loyn_logfit)</span>
+<span id="cb45-2"><a href="#cb45-2"></a>vif</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Check for Multicollinearity
+
+Low Correlation
+
+      Term  VIF   VIF 95% CI Increased SE Tolerance Tolerance 95% CI
+   YR.ISOL 1.80 [1.40, 2.64]         1.34      0.55     [0.38, 0.72]
+     GRAZE 2.52 [1.85, 3.73]         1.59      0.40     [0.27, 0.54]
+       ALT 1.47 [1.19, 2.16]         1.21      0.68     [0.46, 0.84]
+  AREA_L10 1.91 [1.46, 2.79]         1.38      0.52     [0.36, 0.68]
+ LDIST_L10 2.01 [1.52, 2.94]         1.42      0.50     [0.34, 0.66]
+  DIST_L10 1.65 [1.30, 2.42]         1.29      0.60     [0.41, 0.77]</code></pre>
+</div>
+</div>
+<div class="callout callout-note callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Tolerance is the reciprocal of VIF</p>
+</div>
+</div>
+</div>
+</section><section id="visualising-vif" class="slide level2"><h2>Visualising VIF</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-26_d975b1388cd74852b4303c124102922f">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="fu">plot</span>(performance<span class="sc">::</span><span class="fu">check_collinearity</span>(loyn_logfit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-26-1.png" width="960" class="r-stretch"></section><section id="the-best-model" class="slide level2"><h2>The best model?</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-27_f8266d7977079921a607d1cf371f893c">
+<details><summary>Code</summary><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb48-2"><a href="#cb48-2"></a>full6 <span class="ot">&lt;-</span> loyn_logfit</span>
+<span id="cb48-3"><a href="#cb48-3"></a>part5 <span class="ot">&lt;-</span> <span class="fu">update</span>(full6, . <span class="sc">~</span> . <span class="sc">-</span> LDIST_L10)</span>
+<span id="cb48-4"><a href="#cb48-4"></a>part4 <span class="ot">&lt;-</span> <span class="fu">update</span>(part5, . <span class="sc">~</span> . <span class="sc">-</span> DIST_L10)</span>
+<span id="cb48-5"><a href="#cb48-5"></a>part3 <span class="ot">&lt;-</span> <span class="fu">update</span>(part4, . <span class="sc">~</span> . <span class="sc">-</span> ALT)</span>
+<span id="cb48-6"><a href="#cb48-6"></a>part2 <span class="ot">&lt;-</span> <span class="fu">update</span>(part3, . <span class="sc">~</span> . <span class="sc">-</span> YR.ISOL)</span>
+<span id="cb48-7"><a href="#cb48-7"></a>part1 <span class="ot">&lt;-</span> <span class="fu">update</span>(part2, . <span class="sc">~</span> . <span class="sc">-</span> GRAZE)</span>
+<span id="cb48-8"><a href="#cb48-8"></a></span>
+<span id="cb48-9"><a href="#cb48-9"></a>formulas <span class="ot">&lt;-</span> <span class="fu">c</span>(part1<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb48-10"><a href="#cb48-10"></a>              part2<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb48-11"><a href="#cb48-11"></a>              part3<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb48-12"><a href="#cb48-12"></a>              part4<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb48-13"><a href="#cb48-13"></a>              part5<span class="sc">$</span>call<span class="sc">$</span>formula, </span>
+<span id="cb48-14"><a href="#cb48-14"></a>              loyn_logfit<span class="sc">$</span>call<span class="sc">$</span>formula)</span>
+<span id="cb48-15"><a href="#cb48-15"></a>formulas <span class="ot">&lt;-</span></span>
+<span id="cb48-16"><a href="#cb48-16"></a>  <span class="fu">c</span>(<span class="st">"ABUND ~ AREA_L10"</span>,</span>
+<span id="cb48-17"><a href="#cb48-17"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE"</span>,</span>
+<span id="cb48-18"><a href="#cb48-18"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL"</span>,</span>
+<span id="cb48-19"><a href="#cb48-19"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT"</span>,</span>
+<span id="cb48-20"><a href="#cb48-20"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10"</span>,</span>
+<span id="cb48-21"><a href="#cb48-21"></a>    <span class="st">"ABUND ~ AREA_L10 + GRAZE + YR.ISOL + ALT + DIST_L10 + LDIST_L10"</span>)</span>
+<span id="cb48-22"><a href="#cb48-22"></a></span>
+<span id="cb48-23"><a href="#cb48-23"></a>rs <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">glance</span>(part1), </span>
+<span id="cb48-24"><a href="#cb48-24"></a>          <span class="fu">glance</span>(part2), </span>
+<span id="cb48-25"><a href="#cb48-25"></a>          <span class="fu">glance</span>(part3), </span>
+<span id="cb48-26"><a href="#cb48-26"></a>          <span class="fu">glance</span>(part4),</span>
+<span id="cb48-27"><a href="#cb48-27"></a>          <span class="fu">glance</span>(part5), </span>
+<span id="cb48-28"><a href="#cb48-28"></a>          <span class="fu">glance</span>(full6)) <span class="sc">%&gt;%</span></span>
+<span id="cb48-29"><a href="#cb48-29"></a>        <span class="fu">mutate</span>(<span class="at">Model =</span> formulas) <span class="sc">%&gt;%</span></span>
+<span id="cb48-30"><a href="#cb48-30"></a>        <span class="fu">select</span>(Model, r.squared, adj.r.squared)</span>
+<span id="cb48-31"><a href="#cb48-31"></a></span>
+<span id="cb48-32"><a href="#cb48-32"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details><div class="cell-output-display">
 <table>
 <colgroup>
@@ -1120,8 +1243,8 @@ F-statistic: 17.75 on 6 and 49 DF,  p-value: 8.443e-11</code></pre>
 </ol>
 <p>In backward selection, the model fit is assessed using the Akaike Information Criterion (AIC) or the Bayesian Information Criterion (BIC). <strong>Here we focus on the AIC.</strong></p>
 </section><section id="in-r" class="slide level2"><h2>In R</h2>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-21_5c664d6aebf598eb477814fb2213d1b3">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>back_step <span class="ot">&lt;-</span> <span class="fu">step</span>(loyn_logfit, <span class="at">direction =</span> <span class="st">"backward"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-28_c267e9b55fc78b3b74c85f48362c403d">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>back_step <span class="ot">&lt;-</span> <span class="fu">step</span>(loyn_logfit, <span class="at">direction =</span> <span class="st">"backward"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Start:  AIC=214.14
 ABUND ~ (AREA + YR.ISOL + DIST + LDIST + GRAZE + ALT + AREA_L10 + 
@@ -1175,6 +1298,7 @@ ABUND ~ YR.ISOL + GRAZE + AREA_L10
 <ul>
 <li>Most <strong>popular</strong> model selection criterion.</li>
 <li>Developed by <a href="https://en.wikipedia.org/wiki/Hirotugu_Akaike">Hirotsugu Akaike</a> under the name of “an information criterion” (AIC)</li>
+<li>Founded on information theory which is concerned with the transmission, processing, utilization, and extraction of information.</li>
 </ul></section><section id="formula" class="slide level2" data-auto-animate="true"><h2 data-id="quarto-animate-title">Formula</h2>
 <p><span class="math display">\[AIC = 2k - 2\ln(L)\]</span></p>
 <p>where <span class="math inline">\(k\)</span> is the number of parameters in the model and <span class="math inline">\(L\)</span> is the maximum value of the likelihood function. When used in linear regression, the AIC can also be defined as:</p>
@@ -1185,14 +1309,194 @@ ABUND ~ YR.ISOL + GRAZE + AREA_L10
 <ul>
 <li>The AIC is a measure of the <strong>relative quality</strong> or <strong>goodness of fit</strong> of a statistical model for a given set of data.</li>
 <li>It estimates the <strong>relative amount of information</strong> lost by a given model when it is used to approximate the true underlying process that generated the data.</li>
-<li>The smaller the AIC, the better the model fits the data.</li>
+<li><strong>The smaller the AIC, the better the model fits the data.</strong></li>
 <li>A <em>relative</em> measure and <em>unitless</em>, so it is not worth trying to interpret alone.</li>
+</ul></section><section id="back-to-our-example" class="slide level2"><h2>Back to our example</h2>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-29_3deb1b75ea17691287128043ba4284aa">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>back_step <span class="ot">&lt;-</span> <span class="fu">step</span>(loyn_logfit, <span class="at">direction =</span> <span class="st">"backward"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=214.14
+ABUND ~ (AREA + YR.ISOL + DIST + LDIST + GRAZE + ALT + AREA_L10 + 
+    LDIST_L10 + DIST_L10) - AREA - LDIST - DIST
+
+            Df Sum of Sq    RSS    AIC
+- LDIST_L10  1      3.80 2000.7 212.25
+- DIST_L10   1      4.68 2001.5 212.27
+- ALT        1     27.02 2023.9 212.90
+&lt;none&gt;                   1996.8 214.14
+- YR.ISOL    1    108.83 2105.7 215.11
+- GRAZE      1    131.07 2127.9 215.70
+- AREA_L10   1   1059.75 3056.6 235.98
+
+Step:  AIC=212.25
+ABUND ~ YR.ISOL + GRAZE + ALT + AREA_L10 + DIST_L10
+
+           Df Sum of Sq    RSS    AIC
+- DIST_L10  1     12.64 2013.3 210.60
+- ALT       1     35.12 2035.8 211.22
+&lt;none&gt;                  2000.7 212.25
+- YR.ISOL   1    121.64 2122.3 213.55
+- GRAZE     1    132.44 2133.1 213.84
+- AREA_L10  1   1193.04 3193.7 236.44
+
+Step:  AIC=210.6
+ABUND ~ YR.ISOL + GRAZE + ALT + AREA_L10
+
+           Df Sum of Sq    RSS    AIC
+- ALT       1     57.84 2071.1 210.19
+&lt;none&gt;                  2013.3 210.60
+- GRAZE     1    123.48 2136.8 211.94
+- YR.ISOL   1    134.89 2148.2 212.23
+- AREA_L10  1   1227.11 3240.4 235.25
+
+Step:  AIC=210.19
+ABUND ~ YR.ISOL + GRAZE + AREA_L10
+
+           Df Sum of Sq    RSS    AIC
+&lt;none&gt;                  2071.1 210.19
+- YR.ISOL   1    129.81 2200.9 211.59
+- GRAZE     1    188.45 2259.6 213.06
+- AREA_L10  1   1262.97 3334.1 234.85</code></pre>
+</div>
+</div>
+<p>Printing <code>back_step</code> reveals the final model:</p>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-30_c70392d3ac16abd2f4570f7d18476bc8">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>back_step</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ABUND ~ YR.ISOL + GRAZE + AREA_L10, data = loyn)
+
+Coefficients:
+(Intercept)      YR.ISOL        GRAZE     AREA_L10  
+ -134.26065      0.07835     -1.90216      7.16617  </code></pre>
+</div>
+</div>
+</section><section id="backward-elimination-coefficients" class="slide level2"><h2>Backward elimination: coefficients</h2>
+<h3 id="full-model-2">Full model</h3>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-31_8cf3bb7b604e7ce476a349de2d3aab90">
+<details><summary>Code</summary><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(</span>
+<span id="cb55-2"><a href="#cb55-2"></a>  loyn_logfit, back_step, </span>
+<span id="cb55-3"><a href="#cb55-3"></a>  <span class="at">show.ci =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb55-4"><a href="#cb55-4"></a>  <span class="at">show.aic =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb55-5"><a href="#cb55-5"></a>  <span class="at">dv.labels =</span> <span class="fu">c</span>(<span class="st">"Full model"</span>,</span>
+<span id="cb55-6"><a href="#cb55-6"></a>                <span class="st">"Backward model"</span>)</span>
+<span id="cb55-7"><a href="#cb55-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="2" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">Full model</th>
+<th colspan="2" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">Backward model</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-125.70</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.177</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-134.26</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.126</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">YR ISOL</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.07</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.109</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.08</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.077</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">GRAZE</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.67</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.079</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-1.90</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>0.034</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">ALT</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.02</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.419</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">AREA L10</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">7.47</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">7.17</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">LDIST L10</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.65</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.761</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">DIST L10</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.91</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.736</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="2">56</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="2">56</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">R<sup>2</sup> / R<sup>2</sup> adjusted</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.685 / 0.646</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.673 / 0.654</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">AIC</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">375.064</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">371.109</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+<p>The backward model retains more explanatory power than the full model!</p>
+</section></section><section><section id="summary" class="title-slide slide level1 center"><h1>Summary</h1>
+
+</section><section id="model-selection" class="slide level2"><h2>Model selection</h2>
+<h3 id="model-development">Model development</h3>
+<ol type="1">
+<li>Start with full model and check assumptions (e.g.&nbsp;normality, homoscedasticity, linearity, etc.).</li>
+<li>Look for additional issues (e.g.&nbsp;multicollinearity, outliers, etc.) - look at correlations, leverage, VIF plots.</li>
+<li>Consider transformations (e.g.&nbsp;log, sqrt, etc.).</li>
+<li>Test assumptions again.</li>
+</ol>
+<h3 id="model-selection-1">Model selection</h3>
+<ol start="5" type="1">
+<li>Use VIF as an initial step to get rid of highly correlated predictors.</li>
+<li>Perform variable selection using backward elimination (good and fast), because:
+<ul>
+<li>Using r<sub>2</sub> as a criterion is <em>not</em> recommended (it is not a good measure of model fit, only a good measure of variance explained).</li>
+<li>Using adjuster r<sub>2</sub> is better, but has the same issue as r<sub>2</sub>.</li>
+<li>Using partial F-test is good, but slow.</li>
+</ul>
+</li>
+</ol></section></section><section><section id="next-lecture" class="title-slide slide level1 center"><h1>Next lecture</h1>
+
+</section><section id="next-lecture-model-interpretation-and-prediction" class="slide level2"><h2>Next lecture: model interpretation and prediction</h2>
+<ul>
+<li>How to incorporate cross-validation into your workflow</li>
+<li>Determining prediction intervals and performance metrics</li>
 </ul>
 <!-- 
 ## Abalone
 
 
-::: {.cell hash='index_cache/revealjs/unnamed-chunk-22_aad154de3463ae7522a03fb11a9bf340'}
+::: {.cell hash='index_cache/revealjs/unnamed-chunk-32_d3ac071ff80d1a00d29cdd2282a4c5c9'}
 
 ```{.r .cell-code}
 # load abalone data
