@@ -1,4 +1,7 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
+*.html
+*.pdf
+*_files/
+/.luarc.json
+quarto-latest.deb
+
+/.quarto/
