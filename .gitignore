@@ -5,3 +5,4 @@
 quarto-latest.deb
 
 /.quarto/
+.Rproj.user

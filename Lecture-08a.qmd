@@ -30,24 +30,41 @@ ggplot2::theme_set(cowplot::theme_half_open())
 -- [David Russell](https://en.wikipedia.org/wiki/David_Russell_(guitarist))
 
 
-## Last lecture...
+## Workflow {auto-animate=true}
 
-- Model *development*.
-- Model transformations: e.g. Log-linear, Linear-log, Log-log.
-- Model diagnostics: Residuals.
-- Model interpretation: Coefficients.
+1. Model development
+    + Explore: visualise, summarise
+    + Transform predictors: linearise, reduce skewness/leverage
+    + Model: fit, check assumptions, interpret, transform. Repeat.
+  
+2. Variable selection
+    + VIF: remove predictors with high variance inflation factor
+    + Model selection: stepwise selection, AIC, principle of parsimony, assumption checks
+  
+3. Predictive modelling
+    + Predict: Use the model to predict new data
+    + Validate: Evaluate the model’s performance
 
-. . .
 
-### This week
 
-- Variable selection: partial F-test, stepwise regression.
-- Model disagnostics: Cook's distance/leverage.
+## Workflow {auto-animate=true}
+
+
+
+
+
+  
+2. Variable selection
+    + VIF: remove predictors with high variance inflation factor
+    + Model selection: stepwise selection, AIC, principle of parsimony, assumption checks
+  
+ 
+ 
 
 ## Previously on ENVX2001... {auto-animate="true"}
 
 
-We fitted a multiple linear regression model to the data (slide 62).
+We fitted a multiple linear regression model to the data.
 
 ```{r}
 #| message=FALSE, warning=FALSE
@@ -91,9 +108,7 @@ A good model:
 - The more predictors we include, the more variance we can explain.
 - However, the more predictors we include, *the more bias we introduce*.
 
-### Simulated data
-
-What happens when we add more predictors to a model?
+### What happens when we add more predictors to a model?
 
 A simple example using polynomial regression.
 
@@ -186,11 +201,12 @@ p
 - **Stepwise regression**: add/remove predictors one at a time, works well when the number of predictors is large and the main aim is to **interpret** the model.
 - **Cross-validation**: leave-one-out, k-fold, etc., works well when the number of predictors is large and main aim is to **predict** the model. *Note: can be used with stepwise regression.*
 
-# Partia F-test
+# Partial F-test
 
 ## Air quality: can we reduce the number of predictors? {auto-animate="true"}
 
-### Full model:
+**Full model:**
+
 ```{r}
 summary(multi_fit)
 ```
@@ -206,7 +222,7 @@ summary(multi_fit)
 
 . . .
 
-### Reduced model: take out `Wind`
+**Reduced model: take out `Wind`**
 ```{r}
 reduced_fit <- lm(log(Ozone) ~ Temp + Solar.R, data = airquality)
 summary(reduced_fit)
@@ -338,7 +354,7 @@ This is because the reduced model is *nested* within the full model so the parti
 loyn <-read_csv("assets/loyn.csv") 
 ```
 
-- Can we predict the abundance of birds in forrest patches cleared for agriculture, based on patch size, area, grazing and other variables?
+- Can we predict the abundance of birds in forest patches cleared for agriculture, based on patch size, area, grazing and other variables?
 - Loyn ([1987](https://www.researchgate.net/profile/Richard-Loyn/publication/279541149_Effects_of_patch_area_and_habitat_on_bird_abundances_species_numbers_and_tree_health_in_fragmented_Victoria_forests/links/563ae1bc08ae337ef2985592/Effects-of-patch-area-and-habitat-on-bird-abundances-species-numbers-and-tree-health-in-fragmented-Victoria-forests.pdf))
   - DIST: Distance to nearest patch (km)
   - LDIST: Distance to a larger patch (km)
@@ -628,7 +644,7 @@ back_step
 
 ## Backward elimination: coefficients
 
-### Full model
+**Full model**
 
 ```{r}
 #| code-fold: true
@@ -647,13 +663,14 @@ The backward model retains more explanatory power than the full model!
 
 ## Model selection
 
-### Model development
+**Model development**
+
 1. Start with full model and check assumptions (e.g. normality, homoscedasticity, linearity, etc.).
 2. Look for additional issues (e.g. multicollinearity, outliers, etc.) - look at correlations, leverage, VIF plots.
 3. Consider transformations (e.g. log, sqrt, etc.).
 4. Test assumptions again.
 
-### Model selection
+**Model selection**
 
 5. Use VIF as an initial step to get rid of highly correlated predictors.
 6. Perform variable selection using backward elimination (good and fast), because:
