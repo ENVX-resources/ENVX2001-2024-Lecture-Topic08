@@ -203,7 +203,7 @@ p
 
 # Partial F-test
 
-## Air quality: can we reduce the number of predictors? {auto-animate="true"}
+## Air quality: can we reduce the number of predictors?
 
 **Full model:**
 
@@ -211,29 +211,29 @@ p
 summary(multi_fit)
 ```
 
-- 3 predictors: `Temp`, `Solar.R`, `Wind`
 - `Wind` has the highest p-value, can we remove it?
 - Full model: multiple R-squared = 0.66, adjusted R-squared = 0.66
 
-## {auto-animate="true"}
+## 
 
 - `Wind` has the highest p-value, can we remove it?
 - Full model: multiple R-squared = 0.66, adjusted R-squared = 0.66
-
-. . .
 
 **Reduced model: take out `Wind`**
+
 ```{r}
 reduced_fit <- lm(log(Ozone) ~ Temp + Solar.R, data = airquality)
 summary(reduced_fit)
 ```
 
-. . .
+##
 
+- Full model: multiple R-squared = 0.66, adjusted R-squared = 0.66
 - Reduced model: multiple R-squared = 0.62, adjusted R-squared = 0.61
 - **Adjusted R-squared is lower, but is a 0.04 difference "worth it"?**
 
-(As the full model has a higher adjusted R-squared, we can already conclude that the full model is better than the reduced model, but let's answer the question anyway.)
+As the full model has a higher adjusted R-squared, we can already conclude that the full model is better than the reduced model, but let's answer the question anyway.
+
 
 ## The r^2^ value
 
@@ -272,11 +272,21 @@ $$F = \big| \frac{SS_{reg,full} - SS_{reg,reduced}}{(df_{res,full} - df_{res,red
 ```{r}
 full <- anova(multi_fit) %>% broom::tidy()
 full
+
+```
+:::
+::: {.column width="50%"}
+```{r}
 reduced <- anova(reduced_fit) %>% broom::tidy()
 reduced
 ```
 :::
-::: {.column width="50%"}
+::::
+
+##
+
+$$F = \big| \frac{SS_{reg,full} - SS_{reg,reduced}}{(df_{res,full} - df_{res,reduced})} \big | \div MS_{res, full}$$
+
 - $SS_{reg,full} = 45.8 + 5.07 + 3.97 = 54.84$
 - $SS_{reg,reduced} = 45.8 + 5.07 = 50.87$
 - $df_{res,full} = 107$
@@ -284,8 +294,7 @@ reduced
 
 $F = |\frac{54.84 - 50.87}{(107-108)}| \div 0.259 = 15.35$
 
-:::
-::::
+
 
 ## 
 
@@ -302,7 +311,7 @@ F
 pf(F, df1 = 1, df2 = resdf_full, lower.tail = FALSE)
 ```
 
-. . .
+##
 
 Alternatively (using functions):
 ```{r}
@@ -366,13 +375,17 @@ loyn <-read_csv("assets/loyn.csv")
 
 ```{r}
 glimpse(loyn)
+
+```
+
+## Full model
+
+```{r}
 loyn_fit <- lm(ABUND ~ ., data = loyn)
 summary(loyn_fit)
 ```
 
 ## Wait! Before we go on...
-
-. . .
 
 ```{r}
 summary(loyn)
@@ -381,11 +394,8 @@ summary(loyn)
 - The predictors are on very different scales, which can cause problems for the model.
 - Transforming the predictors can help.
 
-. . .
-
-:::{.callout-tip}
 Transforming predictors can help with model fitting but it is also optional -- you can still fit a model without transforming predictors. An advantage of transforming predictors is that it may help with leverage and outlier issues.
-:::
+
 
 ## Before transformation
 
@@ -500,6 +510,8 @@ performance::check_outliers(loyn_logfit)
 cor(loyn)
 ```
 
+
+## Variance inflation factors using `car`
 ```{r}
 car::vif(loyn_logfit)
 ```
@@ -636,6 +648,9 @@ $$AIC = n\log(\frac{RSS}{n}) + 2k$$
 ```{r}
 back_step <- step(loyn_logfit, direction = "backward")
 ```
+
+##
+
 Printing `back_step` reveals the final model:
 
 ```{r}
@@ -675,7 +690,7 @@ The backward model retains more explanatory power than the full model!
 5. Use VIF as an initial step to get rid of highly correlated predictors.
 6. Perform variable selection using backward elimination (good and fast), because:
    - Using r~2~ as a criterion is *not* recommended (it is not a good measure of model fit, only a good measure of variance explained). 
-   - Using adjuster r~2~ is better, but has the same issue as r~2~.
+   - Using adjusted r^2^ is better, but has the same issue as r^2^.
    - Using partial F-test is good, but slow.
 
 # Next lecture
